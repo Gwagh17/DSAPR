@@ -1,0 +1,72 @@
+ 
+from collections import deque 
+ 
+# Function to display the adjacency matrix of the graph 
+def display_graph(cost, n): 
+    print("The adjacency matrix of the graph is:") 
+    for i in range(n): 
+        for j in range(n): 
+            print(cost[i][j], end=" ") 
+        print() 
+ 
+# BFS function 
+def bfs(cost, n, v): 
+    visited = [False] * n 
+    queue = deque([v]) 
+    visited[v] = True 
+    print(f"The BFS of the Graph is:") 
+    print(v, end=" ") 
+ 
+    while queue: 
+        v = queue.popleft() 
+        for j in range(n): 
+            if cost[v][j] != 0 and not visited[j]: 
+                visited[j] = True 
+                queue.append(j) 
+                print(j, end=" ") 
+ 
+    print()  # for newline 
+ 
+# DFS function 
+def dfs(cost, n, v): 
+    visited = [False] * n 
+    stack = [v] 
+    print(f"The DFS of the Graph is:") 
+    print(v, end=" ") 
+ 
+    while stack: 
+        v = stack.pop() 
+        if not visited[v]: 
+            visited[v] = True 
+            print(v, end=" ") 
+            for j in range(n-1, -1, -1):  # reverse order to visit neighbors 
+                if cost[v][j] != 0 and not visited[j]: 
+                    stack.append(j) 
+    print()  # for newline 
+ 
+# Main function 
+def main(): 
+    n = int(input("Enter number of vertices: ")) 
+    m = int(input("Enter number of edges: ")) 
+     
+    # Initialize the cost (adjacency matrix) 
+    cost = [[0] * n for _ in range(n)] 
+     
+    print("\nEDGES") 
+    for _ in range(m): 
+        i, j = map(int, input().split()) 
+        cost[i][j] = 1 
+        cost[j][i] = 1  # Since the graph is undirected 
+     
+    display_graph(cost, n) 
+ 
+    # BFS 
+    v = int(input("Enter initial vertex for BFS: ")) 
+    bfs(cost, n, v) 
+ 
+    # DFS 
+    v = int(input("Enter initial vertex for DFS: ")) 
+    dfs(cost, n, v) 
+ 
+if __name__ == "__main__": 
+    main() 
