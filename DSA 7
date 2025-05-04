@@ -1,0 +1,70 @@
+ 
+import sys 
+ 
+class Graph: 
+    def __init__(self, n): 
+        self.num = n 
+        self.data = []  # List to store city names 
+        self.AM = [[0] * n for _ in range(n)]  # Adjacency matrix for the graph 
+ 
+        # Input for city names 
+        print("Enter names of all cities:") 
+        for i in range(n): 
+            self.data.append(input()) 
+ 
+        # Input for costs to connect cities 
+        print("Enter cost to connect cities (enter 0 if no connection):") 
+        for i in range(n): 
+            for j in range(n): 
+                if i == j: 
+                    self.AM[i][j] = 0  # No cost to connect a city to itself 
+                else: 
+                    cost = int(input(f"Cost to connect {self.data[i]} and {self.data[j]}: ")) 
+                    if cost == 0: 
+                        self.AM[i][j] = sys.maxsize  # No connection if the cost is 0 
+                    else: 
+                        self.AM[i][j] = cost 
+ 
+    def prims(self): 
+        visited = [False] * self.num 
+        distance = [sys.maxsize] * self.num  # Set all distances to infinity 
+        from_city = [-1] * self.num  # Array to store the parent city 
+        total_cost = 0 
+ 
+        distance[0] = 0  # Start from the first city (index 0) 
+ 
+        for _ in range(self.num - 1): 
+            # Find the unvisited city with the smallest distance 
+            min_distance = sys.maxsize 
+            u = -1 
+            for i in range(self.num): 
+                if not visited[i] and distance[i] < min_distance: 
+                    min_distance = distance[i] 
+                    u = i 
+ 
+            # Mark the selected city as visited 
+            visited[u] = True 
+            total_cost += min_distance 
+ 
+            # Update the distances of the neighboring cities 
+            for v in range(self.num): 
+                if not visited[v] and self.AM[u][v] != sys.maxsize and self.AM[u][v] < distance[v]: 
+                    distance[v] = self.AM[u][v] 
+                    from_city[v] = u 
+ 
+        # Display the MST 
+        print("\nCities that need to be connected:") 
+        for i in range(1, self.num): 
+            print(f"{self.data[from_city[i]]} -> {self.data[i]} with cost {self.AM[from_city[i]][i]}") 
+ 
+        print(f"Total cost of connecting all cities: {total_cost}") 
+ 
+ 
+def main(): 
+    n = int(input("Enter number of cities: ")) 
+    gr = Graph(n)  # Create the graph object for cities 
+    gr.prims()  # Run Prim's algorithm to find MST 
+ 
+ 
+if __name__ == "__main__": 
+    main() 
