@@ -1,0 +1,152 @@
+ 
+class Node: 
+    def __init__(self, data): 
+        self.data = data 
+        self.left = None 
+        self.right = None 
+ 
+class BinarySearchTree: 
+    def __init__(self): 
+        self.root = None 
+ 
+    # Function to insert a node into the BST 
+    def insert(self, data): 
+        if not self.root: 
+            self.root = Node(data) 
+        else: 
+            self._insert_recursive(self.root, data) 
+ 
+    # Helper function for recursive insertion 
+    def _insert_recursive(self, node, data): 
+        if data < node.data: 
+            if node.left is None: 
+                node.left = Node(data) 
+            else: 
+                self._insert_recursive(node.left, data) 
+        else: 
+            if node.right is None: 
+                node.right = Node(data) 
+            else: 
+                self._insert_recursive(node.right, data) 
+ 
+    # Function to insert a new node 
+    def insert_new_node(self, data): 
+        self.insert(data) 
+ 
+    # Function to find the height of the tree (Longest path from root) 
+    def find_longest_path(self): 
+        return self._height(self.root) 
+ 
+    # Helper function for calculating height 
+    def _height(self, node): 
+        if node is None: 
+            return 0 
+        left_height = self._height(node.left) 
+        right_height = self._height(node.right) 
+        return max(left_height, right_height) + 1 
+ 
+    # Function to find the minimum data value in the tree 
+    def find_min_value(self): 
+        return self._find_min(self.root) 
+ 
+    # Helper function to find the minimum value 
+    def _find_min(self, node): 
+        current = node 
+        while current.left is not None: 
+            current = current.left 
+        return current.data 
+ 
+    # Function to swap left and right at every node 
+    def swap_left_right(self): 
+        self._swap_recursive(self.root) 
+ 
+    # Helper function to recursively swap left and right pointers 
+    def _swap_recursive(self, node): 
+        if node is not None: 
+            node.left, node.right = node.right, node.left 
+            self._swap_recursive(node.left) 
+            self._swap_recursive(node.right) 
+ 
+    # Function to search for a value in the tree 
+    def search(self, value): 
+        return self._search_recursive(self.root, value) 
+ 
+    # Helper function for recursive search 
+    def _search_recursive(self, node, value): 
+        if node is None: 
+            return False 
+        if node.data == value: 
+            return True 
+        elif value < node.data: 
+            return self._search_recursive(node.left, value) 
+        else: 
+            return self._search_recursive(node.right, value) 
+ 
+    # Function to print the tree for testing purposes 
+    def print_tree(self): 
+        self._print_recursive(self.root) 
+ 
+    # Helper function for in-order traversal (for printing the tree) 
+    def _print_recursive(self, node): 
+        if node is not None: 
+            self._print_recursive(node.left) 
+            print(node.data, end=" ") 
+            self._print_recursive(node.right) 
+ 
+# Main program 
+if __name__ == "__main__": 
+    bst = BinarySearchTree() 
+ 
+    # Take input for tree construction 
+    n = int(input("Enter number of values to insert into the tree: ")) 
+    values = [int(input(f"Enter value {i + 1}: ")) for i in range(n)] 
+ 
+    for value in values: 
+        bst.insert(value) 
+ 
+    while True: 
+        # Menu for operation selection 
+        print("\n--- Menu ---") 
+        print("Press 1 for Insert new node") 
+        print("Press 2 for Find number of nodes in longest path from root") 
+        print("Press 3 for Minimum data value found in the tree") 
+        print("Press 4 for Change a tree so that the roles of the left and right pointers are swapped at every node") 
+        print("Press 5 for Search a value") 
+        print("Press 6 to Exit") 
+ 
+        choice = input("Enter your choice: ") 
+ 
+        if choice == '1': 
+            # Insert new node 
+            new_node = int(input("\nEnter a new value to insert into the tree: ")) 
+            bst.insert_new_node(new_node) 
+            print("\nTree after inserting the new node:") 
+            bst.print_tree() 
+ 
+        elif choice == '2': 
+            # Find number of nodes in the longest path from root 
+            print(f"\nLongest path from root (Height of tree): {bst.find_longest_path()}") 
+ 
+        elif choice == '3': 
+            # Find the minimum data value in the tree 
+            print(f"Minimum value in the tree: {bst.find_min_value()}") 
+ 
+        elif choice == '4': 
+            # Swap left and right at every node 
+            bst.swap_left_right() 
+            print("\nTree after swapping left and right at every node:") 
+            bst.print_tree() 
+ 
+        elif choice == '5': 
+            # Search for a value 
+            value_to_search = int(input("\nEnter a value to search for in the tree: ")) 
+            found = bst.search(value_to_search) 
+            print(f"Is {value_to_search} found in the tree? {found}") 
+ 
+        elif choice == '6': 
+            # Exit the program 
+            print("Exiting the program...") 
+            break 
+ 
+        else: 
+            print("Invalid choice, please try again.") 
