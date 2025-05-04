@@ -1,0 +1,48 @@
+class Heap:
+    def __init__(self):
+        self.n = 0
+        self.minheap = []
+        self.maxheap = []
+
+    # Method to get input from the user and construct heaps
+    def get(self):
+        self.n = int(input("Enter number of students: "))
+        print("Enter marks of students: ")
+        for i in range(self.n):
+            k = int(input())  # Input marks of student
+            self.minheap.append(k)
+            self.upAdjust(True, i)   # Adjust for min heap
+            self.maxheap.append(k)
+            self.upAdjust(False, i)  # Adjust for max heap
+
+    # Method to display minimum mark (root of min heap)
+    def displayMin(self):
+        if self.minheap:
+            print(f"Minimum marks are: {self.minheap[0]}")
+        else:
+            print("Min heap is empty.")
+
+    # Method to display maximum mark (root of max heap)
+    def displayMax(self):
+        if self.maxheap:
+            print(f"Maximum marks are: {self.maxheap[0]}")
+        else:
+            print("Max heap is empty.")
+
+    # Method to adjust the heap (either min or max)
+    def upAdjust(self, isMinHeap, i):
+        if isMinHeap:  # Min Heap
+            while i > 0 and self.minheap[(i - 1) // 2] > self.minheap[i]:
+                self.minheap[i], self.minheap[(i - 1) // 2] = self.minheap[(i - 1) // 2], self.minheap[i]
+                i = (i - 1) // 2
+        else:  # Max Heap
+            while i > 0 and self.maxheap[(i - 1) // 2] < self.maxheap[i]:
+                self.maxheap[i], self.maxheap[(i - 1) // 2] = self.maxheap[(i - 1) // 2], self.maxheap[i]
+                i = (i - 1) // 2
+
+# Main function
+if __name__ == "__main__":
+    H = Heap()
+    H.get()
+    H.displayMin()
+    H.displayMax()
